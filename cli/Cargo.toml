@@ -1,0 +1,12 @@
+[package]
+name = "slightjs-cli"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "slightjs"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1.0.68"
+wizer = "1.4.0"

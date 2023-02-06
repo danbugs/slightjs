@@ -1,0 +1,10 @@
+[package]
+name = "slightjs-runtime"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.68"
+wasmtime = "0.34.1"
+wasmtime-wasi = "0.34.1"
+
