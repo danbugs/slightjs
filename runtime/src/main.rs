@@ -9,7 +9,7 @@ fn main() -> Result<()> {
     let mut linker = Linker::new(&engine);
     wasmtime_wasi::add_to_linker(&mut linker, |s| s)?;
 
-    linker.func_wrap("host", "double", |x: i32| x * 2)?;
+    linker.func_wrap("host", "host::double", |x: i32| x * 2)?;
 
     let args = std::env::args().collect::<Vec<String>>();
     let index_wasm = &args[1];

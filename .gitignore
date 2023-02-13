@@ -1,3 +1,6 @@
 /target
 /Cargo.lock
 **/**.wasm
+**/**.d.ts
+/engine/src/dynamic.rs
+.DS_Store

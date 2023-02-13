@@ -1,0 +1,9 @@
+/// this is the keyvalue interface we are using in the JS example
+/// it's a slightly modified version of the one in SpiderLightning
+resource keyvalue {
+	static open: func(name: string) -> expected<keyvalue, string>
+	get: func(key: string) -> expected<string, string> 
+	set: func(key: string, value: string) -> expected<unit, string>
+	keys: func() -> expected<list<string>, string>
+	delete: func(key: string) -> expected<unit, string>
+}

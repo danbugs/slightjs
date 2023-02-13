@@ -40,6 +40,7 @@ function ast_to_js(ast) {
                         let record_name = obj[token][keyword].name.replace(/-/g, "_");
                         let record_fields = obj[token][keyword].fields;
                         res += "export interface " + record_name + " {\n";
+
                         for (let j = 0; j < record_fields.length; j++) {
                             let property_name = record_fields[j].property_name.replace(/-/g, "_");
                             let property_type = record_fields[j].property_type;
@@ -101,7 +102,9 @@ function ast_to_js(ast) {
                     case "resource_item":
                         let resource_name = obj[token][keyword].name.replace(/-/g, "_");
                         let resource_contents = obj[token][keyword].contents;
-                        res += "export interface " + resource_name + " {\n";
+                        res += "export class " + resource_name + " {\n";
+
+                        res += "    constructor();\n";
 
                         if (resource_contents) {
                             for (let j = 0; j < resource_contents.length; j++) {

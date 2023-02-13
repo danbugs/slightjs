@@ -47,10 +47,10 @@ fn do_init() -> anyhow::Result<()> {
         panic!("expected function named \"_start\" defined in global scope");
     }
 
-    let re = Regex::new(r"#! (.*)\n").unwrap();
+    let re = Regex::new(r"(^|\r|\n|\r\n)//\s*#! (.*)\n").unwrap();
     let wit_files: Vec<String> = re
         .captures_iter(&script)
-        .map(|cap| cap[1].trim().to_owned())
+        .map(|cap| cap[2].trim().to_owned())
         .collect();
 
     // read wit file as a string

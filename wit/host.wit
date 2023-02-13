@@ -1,3 +1,3 @@
 resource host {
-    double: func(x: u32) -> u32
+    static double: func(x: u32) -> u32
 }

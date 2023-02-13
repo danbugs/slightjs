@@ -1,0 +1,10 @@
+resource host {
+    c: func(c-arg: u32) -> list<u32>
+    d: func(d-arg: u64) -> list<u64>
+    g: func(g-arg: s32) -> list<s32>
+    h: func(h-arg: s64) -> list<s64>
+    j: func(j-arg: float64) -> list<float64>
+    k: func(k-arg: char) -> list<char>
+    l: func(l-arg: bool) -> list<bool>
+    m: func(m-arg: string) -> expected<list<string>, string>
+}

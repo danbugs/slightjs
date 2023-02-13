@@ -1,8 +1,0 @@
-/// a keyvalue interface
-resource keyvalue {
-	static open: func(name: string) -> expected<keyvalue, string>
-	get: func(key: string) -> expected<list<u8>, string> 
-	set: func(key: string, value: list<u8>) -> expected<unit, string>
-	keys: func() -> expected<list<string>, string>
-	delete: func(key: string) -> expected<unit, string>
-}

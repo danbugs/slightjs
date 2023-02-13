@@ -14,7 +14,6 @@ fn main() -> Result<()> {
 
     if env::var("JS_COMPILED").eq(&Ok("1".into())) {
         env::remove_var("JS_COMPILED");
-        println!("Starting engine...");
 
         let wasm = fs::read(engine_path)?;
 
@@ -30,7 +29,6 @@ fn main() -> Result<()> {
     }
 
     env::set_var("JS_COMPILED", "1");
-    println!("Compiling script...");
 
     let script = File::open(js_path)?;
 
