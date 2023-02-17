@@ -2,14 +2,14 @@
 ts-binding-for-host-js:
 	node ts-wit-bindgen/ts-wit-bindgen.js ../wit/altered_keyvalue.wit
 
-.PHONY: compile-js-host-test
+.PHONY: compile-js
 compile-js:
 	cargo build --package slightjs-engine --target wasm32-wasi --quiet
 	cargo run --package slightjs-cli -- ./target/wasm32-wasi/debug/slightjs_engine.wasm ./examples/host-test.js --quiet
 	cargo build --package slightjs-engine --target wasm32-wasi --quiet
 	cargo run --package slightjs-cli -- ./target/wasm32-wasi/debug/slightjs_engine.wasm ./examples/host-test.js --quiet
 
-.PHONY: run-host-test
+.PHONY: run
 run:
 	cargo run --package slightjs-runtime -- ./index.wasm	
 
