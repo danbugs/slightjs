@@ -21,6 +21,7 @@ fn main() -> Result<()> {
             .dir(".")
             .allow_wasi(true)?
             .inherit_stdio(true)
+            .wasm_bulk_memory(true)
             .run(&wasm)?;
 
         fs::write("index.wasm", wasm)?;

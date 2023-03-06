@@ -9,4 +9,4 @@ path = "src/main.rs"
 
 [dependencies]
 anyhow = "1.0.68"
-wizer = "1.4.0"
+wizer = "1.6.0"

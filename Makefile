@@ -4,10 +4,10 @@ ts-binding-for-host-js:
 
 .PHONY: compile-js
 compile-js:
-	cargo build --package slightjs-engine --target wasm32-wasi --quiet
-	cargo run --package slightjs-cli -- ./target/wasm32-wasi/debug/slightjs_engine.wasm ./examples/host-test.js --quiet
-	cargo build --package slightjs-engine --target wasm32-wasi --quiet
-	cargo run --package slightjs-cli -- ./target/wasm32-wasi/debug/slightjs_engine.wasm ./examples/host-test.js --quiet
+	cargo build --package slightjs-engine --target wasm32-wasi
+	cargo run --package slightjs-cli -- ./target/wasm32-wasi/debug/slightjs_engine.wasm ./examples/host-test.js
+	cargo build --package slightjs-engine --target wasm32-wasi
+	cargo run --package slightjs-cli -- ./target/wasm32-wasi/debug/slightjs_engine.wasm ./examples/host-test.js
 
 .PHONY: run
 run:
@@ -15,7 +15,7 @@ run:
 
 .PHONY: compile-js-slight
 compile-js-slight:
-	cargo build --package slightjs-engine --target wasm32-wasi --quiet
-	cargo run --package slightjs-cli -- ./target/wasm32-wasi/debug/slightjs_engine.wasm ./examples/slight-test.js --quiet
-	cargo build --package slightjs-engine --target wasm32-wasi --quiet
-	cargo run --package slightjs-cli -- ./target/wasm32-wasi/debug/slightjs_engine.wasm ./examples/slight-test.js --quiet
+	cargo build --package slightjs-engine --target wasm32-wasi
+	cargo run --package slightjs-cli -- ./target/wasm32-wasi/debug/slightjs_engine.wasm ./examples/slight-test.js
+	cargo build --package slightjs-engine --target wasm32-wasi
+	cargo run --package slightjs-cli -- ./target/wasm32-wasi/debug/slightjs_engine.wasm ./examples/slight-test.js
