@@ -1,3 +1,0 @@
-resource host {
-    static double: func(x: u32) -> u32
-}

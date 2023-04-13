@@ -1,18 +1,12 @@
-use std::{
-    fs::File,
-    io::{self, Read, Write},
-};
+use std::io::{self, Read};
 use std::alloc::{alloc, dealloc, Layout};
 use std::ptr::copy_nonoverlapping;
 
-use generator::generate_rust_code;
 use once_cell::sync::OnceCell;
 use quickjs_wasm_rs::{Context, Value};
-use regex::Regex;
 use send_wrapper::SendWrapper;
 
-pub mod dynamic;
-mod generator;
+pub mod slight_keyvalue;
 
 static CONTEXT: OnceCell<SendWrapper<Context>> = OnceCell::new();
 
@@ -31,6 +25,12 @@ fn console_log(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Resu
     context.undefined_value()
 }
 
+fn from_utf8(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Result<Value> {
+    let bytes = args[0].as_bytes()?.to_vec();
+    let string = String::from_utf8(bytes).unwrap();
+    context.value_from_str(&string)
+}
+
 fn do_init() -> anyhow::Result<()> {
     let mut script = String::new();
     io::stdin().read_to_string(&mut script)?;
@@ -47,25 +47,11 @@ fn do_init() -> anyhow::Result<()> {
         panic!("expected function named \"_start\" defined in global scope");
     }
 
-    let re = Regex::new(r"(^|\r|\n|\r\n)//\s*#! (.*)\n").unwrap();
-    let wit_files: Vec<String> = re
-        .captures_iter(&script)
-        .map(|cap| cap[2].trim().to_owned())
-        .collect();
-
-    // read wit file as a string
-    let mut wit_file = File::open(&wit_files[0])?;
-    let mut wit = String::new();
-    wit_file.read_to_string(&mut wit)?;
-
-    let mut output = File::create("/engine/src/dynamic.rs").unwrap();
-    output.write_all(generate_rust_code(&wit).as_bytes()).unwrap();
-
-    // dynamic context injection
-    dynamic::dynamic_context_injection(&context, &global)?;
-
+    // inject dependencies
+    slight_keyvalue::inject_keyvalue_dependency(&context, &global)?;
     console.set_property("log", context.wrap_callback(console_log)?)?;
     global.set_property("console", console)?;
+    global.set_property("fromUtf8", context.wrap_callback(from_utf8)?)?;
 
     CONTEXT.set(SendWrapper::new(context)).unwrap();
     Ok(())
