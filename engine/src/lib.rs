@@ -1,11 +1,13 @@
-use std::io::{self, Read};
 use std::alloc::{alloc, dealloc, Layout};
+use std::io::{self, Read};
 use std::ptr::copy_nonoverlapping;
 
 use once_cell::sync::OnceCell;
 use quickjs_wasm_rs::{Context, Value};
 use send_wrapper::SendWrapper;
+use slight_http_server::{get_js_req_arg, get_js_res_ret};
 
+pub mod slight_http_server;
 pub mod slight_keyvalue;
 
 static CONTEXT: OnceCell<SendWrapper<Context>> = OnceCell::new();
@@ -49,6 +51,8 @@ fn do_init() -> anyhow::Result<()> {
 
     // inject dependencies
     slight_keyvalue::inject_keyvalue_dependency(&context, &global)?;
+    slight_http_server::inject_http_server_dependency(&context, &global)?;
+
     console.set_property("log", context.wrap_callback(console_log)?)?;
     global.set_property("console", console)?;
     global.set_property("fromUtf8", context.wrap_callback(from_utf8)?)?;
@@ -68,6 +72,41 @@ pub extern "C" fn start() {
     let global = context.global_object().unwrap();
     let entrypoint = global.get_property("_start").unwrap();
     entrypoint.call(&global, &[]).unwrap();
+}
+
+#[export_name = "on-server-init"]
+pub extern "C" fn on_server_init() -> i32 {
+    let context = CONTEXT.get().unwrap();
+    let global = context.global_object().unwrap();
+    let entrypoint = global.get_property("_start").unwrap();
+    entrypoint.call(&global, &[]).unwrap();
+    1
+}
+
+#[export_name = "handle-hello"]
+pub unsafe extern "C" fn handle_hello(
+    arg0: i32,
+    arg1: i32,
+    arg2: i32,
+    arg3: i32,
+    arg4: i32,
+    arg5: i32,
+    arg6: i32,
+    arg7: i32,
+    arg8: i32,
+    arg9: i32,
+) -> i32 {
+    let context = CONTEXT.get().unwrap();
+    let global = context.global_object().unwrap();
+    let entrypoint = global.get_property("handle_hello").unwrap();
+    let req = get_js_req_arg(
+        arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, &context,
+    )
+    .unwrap();
+
+    let res = entrypoint.call(&global, &[req]).unwrap().as_str().unwrap().to_string();
+
+    get_js_res_ret(res)
 }
 
 // Unlike C's realloc, zero-length allocations need not have
