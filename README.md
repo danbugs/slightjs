@@ -14,3 +14,5 @@ make testrun
 ```
 
 Here's a video demo: [![youtube-thumbnail](https://i.imgur.com/BCLkIr4.png)](https://youtu.be/O7fFuu569g0)
+
+> Note: Examples ran on `slight 0.4.1 (d80ce5ba9 2023-04-12)`.
