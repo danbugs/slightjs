@@ -83,8 +83,8 @@ pub extern "C" fn on_server_init() -> i32 {
     1
 }
 
-#[export_name = "handle-hello"]
-pub unsafe extern "C" fn handle_hello(
+#[export_name = "handle-get"]
+pub unsafe extern "C" fn handle_get(
     arg0: i32,
     arg1: i32,
     arg2: i32,
@@ -98,7 +98,85 @@ pub unsafe extern "C" fn handle_hello(
 ) -> i32 {
     let context = CONTEXT.get().unwrap();
     let global = context.global_object().unwrap();
-    let entrypoint = global.get_property("handle_hello").unwrap();
+    let entrypoint = global.get_property("handle_get").unwrap();
+    let req = get_js_req_arg(
+        arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, &context,
+    )
+    .unwrap();
+
+    let res = entrypoint.call(&global, &[req]).unwrap().as_str().unwrap().to_string();
+
+    get_js_res_ret(res)
+}
+
+#[export_name = "handle-post"]
+pub unsafe extern "C" fn handle_post(
+    arg0: i32,
+    arg1: i32,
+    arg2: i32,
+    arg3: i32,
+    arg4: i32,
+    arg5: i32,
+    arg6: i32,
+    arg7: i32,
+    arg8: i32,
+    arg9: i32,
+) -> i32 {
+    let context = CONTEXT.get().unwrap();
+    let global = context.global_object().unwrap();
+    let entrypoint = global.get_property("handle_post").unwrap();
+    let req = get_js_req_arg(
+        arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, &context,
+    )
+    .unwrap();
+
+    let res = entrypoint.call(&global, &[req]).unwrap().as_str().unwrap().to_string();
+
+    get_js_res_ret(res)
+}
+
+#[export_name = "handle-put"]
+pub unsafe extern "C" fn handle_put(
+    arg0: i32,
+    arg1: i32,
+    arg2: i32,
+    arg3: i32,
+    arg4: i32,
+    arg5: i32,
+    arg6: i32,
+    arg7: i32,
+    arg8: i32,
+    arg9: i32,
+) -> i32 {
+    let context = CONTEXT.get().unwrap();
+    let global = context.global_object().unwrap();
+    let entrypoint = global.get_property("handle_put").unwrap();
+    let req = get_js_req_arg(
+        arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, &context,
+    )
+    .unwrap();
+
+    let res = entrypoint.call(&global, &[req]).unwrap().as_str().unwrap().to_string();
+
+    get_js_res_ret(res)
+}
+
+#[export_name = "handle-delete"]
+pub unsafe extern "C" fn handle_delete(
+    arg0: i32,
+    arg1: i32,
+    arg2: i32,
+    arg3: i32,
+    arg4: i32,
+    arg5: i32,
+    arg6: i32,
+    arg7: i32,
+    arg8: i32,
+    arg9: i32,
+) -> i32 {
+    let context = CONTEXT.get().unwrap();
+    let global = context.global_object().unwrap();
+    let entrypoint = global.get_property("handle_delete").unwrap();
     let req = get_js_req_arg(
         arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, &context,
     )

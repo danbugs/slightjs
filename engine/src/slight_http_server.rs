@@ -242,8 +242,9 @@ pub fn inject_http_server_dependency(context: &Context, global: &Value) -> anyho
     let router = context.object_value()?;
     router.set_property("new", context.wrap_callback(router_new)?)?;
     router.set_property("get", context.wrap_callback(router_get)?)?;
-    router.set_property("router_post", context.wrap_callback(router_post)?)?;
-    router.set_property("router_delete", context.wrap_callback(router_delete)?)?;
+    router.set_property("post", context.wrap_callback(router_post)?)?;
+    router.set_property("put", context.wrap_callback(router_put)?)?;
+    router.set_property("delete", context.wrap_callback(router_delete)?)?;
     global.set_property("router", router)?;
 
     let server = context.object_value()?;
@@ -337,10 +338,7 @@ pub unsafe fn get_js_req_arg(
             1 => context.value_from_str("POST")?,
             2 => context.value_from_str("PUT")?,
             3 => context.value_from_str("DELETE")?,
-            4 => context.value_from_str("PATCH")?,
-            5 => context.value_from_str("HEAD")?,
-            6 => context.value_from_str("OPTIONS")?,
-            _ => panic!("invalid enum discriminant"),
+            _ => panic!("not supported HTTP method"),
         },
     )?;
     request.set_property(
