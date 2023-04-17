@@ -1,0 +1,7 @@
+specversion = "0.2"
+
+[[capability]]
+resource = "messaging.nats"
+name = "my-messaging"
+    [capability.configs]
+    NATS_CREDS = "${azapp.NATS_CREDS}"
