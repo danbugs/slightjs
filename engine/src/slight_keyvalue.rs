@@ -40,13 +40,13 @@ fn keyvalue_get(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Res
         let ptr1 = __KEYVALUE_RET_AREA.0.as_mut_ptr() as i32;
         get(self0, ptr0, len0, ptr1);
         match i32::from(*((ptr1 + 0) as *const u8)) {
-            0 => Ok({
+            0 => {
                 let len2 = *((ptr1 + 8) as *const i32) as usize;
 
                 let v = Vec::from_raw_parts(*((ptr1 + 4) as *const i32) as *mut _, len2, len2);
 
-                context.array_buffer_value(&v).unwrap()
-            }),
+                context.array_buffer_value(&v)
+            },
             1 => context.value_from_str(&KeyvalueError(ptr1)),
             _ => panic!("invalid enum discriminant"),
         }
