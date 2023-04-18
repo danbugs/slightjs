@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Restaurant Orders</title>
+  </head>
+  <body>
+    <h1>Restaurant Orders</h1>
+    <label for="order">Enter your order:</label>
+    <input type="text" id="order" name="order">
+    <button onclick="submitOrder()">Submit Order</button>
+    <br>
+    <br>
+    <button onclick="getOrders()">Get Orders</button>
+    <ul id="ordersList"></ul>
+
+    <script>
+      function submitOrder() {
+        const order = document.getElementById("order").value;
+        fetch("http://localhost:3000/post/order", {
+          method: "POST",
+          body: order
+        }).then(response => {
+          console.log(response);
+        }).catch(error => {
+          console.error(error);
+        });
+      }
+
+      function getOrders() {
+        fetch("http://localhost:3000/get/orders")
+          .then(response => {
+            return response.text();
+          }).then(data => {
+            const ordersList = document.getElementById("ordersList");
+            ordersList.innerHTML = "";
+            const orders = data.split(",");
+            orders.forEach(order => {
+              const li = document.createElement("li");
+              li.innerText = order;
+              ordersList.appendChild(li);
+            });
+          }).catch(error => {
+            console.error(error);
+          });
+      }
+    </script>
+  </body>
+</html>

@@ -11,6 +11,7 @@ fn main() -> Result<()> {
     let args: Vec<String> = std::env::args().collect();
     let engine_path = &args[1];
     let js_path = &args[2];
+    let output_file = &args[3];
 
     if env::var("JS_COMPILED").eq(&Ok("1".into())) {
         env::remove_var("JS_COMPILED");
@@ -24,7 +25,7 @@ fn main() -> Result<()> {
             .wasm_bulk_memory(true)
             .run(&wasm)?;
 
-        fs::write("index.wasm", wasm)?;
+        fs::write(output_file, wasm)?;
 
         return Ok(());
     }
@@ -37,6 +38,7 @@ fn main() -> Result<()> {
     let status = Command::new(self_cmd)
         .arg(engine_path)
         .arg(js_path)
+        .arg(output_file)
         .stdin(script)
         .status()?;
     if !status.success() {
