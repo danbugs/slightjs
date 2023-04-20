@@ -7,6 +7,7 @@ use quickjs_wasm_rs::{Context, Value};
 use send_wrapper::SendWrapper;
 use slight_http_server::{get_js_req_arg, get_js_res_ret};
 
+pub mod slight_sql;
 pub mod slight_messaging;
 pub mod slight_http_server;
 pub mod slight_keyvalue;
@@ -54,6 +55,7 @@ fn do_init() -> anyhow::Result<()> {
     slight_keyvalue::inject_keyvalue_dependency(&context, &global)?;
     slight_http_server::inject_http_server_dependency(&context, &global)?;
     slight_messaging::inject_messaging_dependency(&context, &global)?;
+    slight_sql::inject_sql_dependency(&context, &global)?;
 
     console.set_property("log", context.wrap_callback(console_log)?)?;
     global.set_property("console", console)?;
