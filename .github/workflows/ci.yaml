@@ -30,6 +30,8 @@ jobs:
     - uses: Swatinem/rust-cache@v2
     - name: check formatting of source code
       run: make improve
+      env:
+        QUICKJS_WASM_SYS_WASI_SDK_PATH: /opt/wasi-sdk
       
   build:
     runs-on: ${{ matrix.config.os }}
@@ -62,8 +64,17 @@ jobs:
           rustup target add wasm32-wasi
           rustup target add wasm32-unknown-unknown
       
-      - name: build slightjs cli
+      - name: build slightjs cli linux/macos
         run: make build-slightjs-cli
+        if: ${{ fromJSON(matrix.config.os != 'windows-latest') }}
+        env:
+          QUICKJS_WASM_SYS_WASI_SDK_PATH: /opt/wasi-sdk
+      
+      - name: build slightjs cli windows
+        run: make build-slightjs-cli
+        if: ${{ fromJSON(matrix.config.os == 'windows-latest') }}
+        env:
+          QUICKJS_WASM_SYS_WASI_SDK_PATH: C:\wasi-sdk
 
       - run: make prepare-release-linux
         if: ${{ fromJSON(matrix.config.os == 'ubuntu-latest') }}

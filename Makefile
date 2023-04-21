@@ -20,7 +20,6 @@ install-deps-linux:
 	sudo mkdir -p /opt/wasi-sdk
 	sudo mv wasi-sdk-15.0/* /opt/wasi-sdk/
 	sudo rm -rf wasi-sdk-*
-	export QUICKJS_WASM_SYS_WASI_SDK_PATH=/opt/wasi-sdk
 
 .PHONY: install-deps-macos
 install-deps-macos:
@@ -30,7 +29,6 @@ install-deps-macos:
 	sudo mkdir -p /opt/wasi-sdk
 	sudo mv wasi-sdk-15.0/* /opt/wasi-sdk/
 	sudo rm -rf wasi-sdk-*
-	export QUICKJS_WASM_SYS_WASI_SDK_PATH=/opt/wasi-sdk
 
 .PHONY: install-deps-win
 install-deps-win:
@@ -39,7 +37,6 @@ install-deps-win:
 	wget -O wasi-sdk-15.0-mingw.tar.gz https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-15/wasi-sdk-15.0-mingw.tar.gz
 	mkdir -p C:\wasi-sdk
 	tar -xvzf wasi-sdk-15.0-mingw.tar.gz --strip-components=1 -C C:\wasi-sdk
-	setx QUICKJS_WASM_SYS_WASI_SDK_PATH C:\wasi-sdk
 
 .PHONY: prepare-release-linux
 prepare-release-linux:
