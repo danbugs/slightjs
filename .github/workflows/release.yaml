@@ -30,7 +30,7 @@ jobs:
         config:
           - os: ubuntu-latest
           - os: windows-latest
-          - os: macos-latest,
+          - os: macos-latest
 
     steps:
       - uses: actions/checkout@v1 
