@@ -162,14 +162,7 @@ pub fn http_client_request(
 
                 (1i32, ptr10, len10)
             }
-            None => {
-                let e = ();
-                {
-                    let () = e;
-
-                    (0i32, 0i32, 0i32)
-                }
-            }
+            None => (0i32, 0i32, 0i32),
         };
         let ptr12 = __HTTP_CLIENT_RET_AREA.0.as_mut_ptr() as i32;
         request(

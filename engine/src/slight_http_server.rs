@@ -412,11 +412,7 @@ pub unsafe fn get_js_res_ret(result: String) -> i32 {
             *((ptr8 + 12) as *mut i32) = result13 as i32;
         }
         None => {
-            let e = ();
-            {
-                *((ptr8 + 8) as *mut u8) = (0i32) as u8;
-                let () = e;
-            }
+            *((ptr8 + 8) as *mut u8) = (0i32) as u8;
         }
     };
     match body9 {
@@ -430,11 +426,7 @@ pub unsafe fn get_js_res_ret(result: String) -> i32 {
             *((ptr8 + 24) as *mut i32) = ptr14;
         }
         None => {
-            let e = ();
-            {
-                *((ptr8 + 20) as *mut u8) = (0i32) as u8;
-                let () = e;
-            }
+            *((ptr8 + 20) as *mut u8) = (0i32) as u8;
         }
     };
 
