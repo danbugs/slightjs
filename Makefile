@@ -129,3 +129,21 @@ configs-all-in-one:
 	cargo run --package slightjs-cli -- ./target/wasm32-wasi/debug/slightjs_engine.wasm ./examples/configs/index.js ./configs.wasm
 	slight -c ./examples/configs/slightfile.toml run configs.wasm -l
 # </configs>
+
+# <distributed-locking>
+.PHONY: compile-distributed-locking-example
+compile-distributed-locking-example:
+	cargo run --package slightjs-cli -- ./target/wasm32-wasi/debug/slightjs_engine.wasm ./examples/distributed-locking/index.js ./distributed-locking.wasm
+
+.PHONY: run-distributed-locking-example
+run-distributed-locking-example:
+	slight -c ./examples/distributed-locking/slightfile.toml run distributed-locking.wasm -l &
+	slight -c ./examples/distributed-locking/slightfile.toml run distributed-locking.wasm -l
+
+.PHONY: distributed-locking-all-in-one
+distributed-locking-all-in-one:
+	cargo build --package slightjs-engine --target wasm32-wasi
+	cargo run --package slightjs-cli -- ./target/wasm32-wasi/debug/slightjs_engine.wasm ./examples/distributed-locking/index.js ./distributed-locking.wasm
+	slight -c ./examples/distributed-locking/slightfile.toml run distributed-locking.wasm -l &
+	slight -c ./examples/distributed-locking/slightfile.toml run distributed-locking.wasm -l
+# </distributed-locking>

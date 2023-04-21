@@ -7,6 +7,7 @@ use quickjs_wasm_rs::{Context, Value};
 use send_wrapper::SendWrapper;
 use slight_http_server::{get_js_req_arg, get_js_res_ret};
 
+pub mod slight_distributed_locking;
 pub mod slight_configs;
 pub mod slight_blob_store;
 pub mod slight_http_types;
@@ -39,6 +40,12 @@ fn from_utf8(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Result
     context.value_from_str(&string)
 }
 
+fn sleep(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Result<Value> {
+    let millis = args[0].as_i32_unchecked() as u64;
+    std::thread::sleep(std::time::Duration::from_millis(millis));
+    context.null_value()
+}
+
 fn do_init() -> anyhow::Result<()> {
     let mut script = String::new();
     io::stdin().read_to_string(&mut script)?;
@@ -63,10 +70,12 @@ fn do_init() -> anyhow::Result<()> {
     slight_http_client::inject_http_client_dependency(&context, &global)?;
     slight_blob_store::inject_blob_store_dependency(&context, &global)?;
     slight_configs::inject_configs_dependency(&context, &global)?;
+    slight_distributed_locking::inject_distributed_locking_dependency(&context, &global)?;
 
     console.set_property("log", context.wrap_callback(console_log)?)?;
     global.set_property("console", console)?;
     global.set_property("fromUtf8", context.wrap_callback(from_utf8)?)?;
+    global.set_property("sleep", context.wrap_callback(sleep)?)?;
 
     CONTEXT.set(SendWrapper::new(context)).unwrap();
     Ok(())
