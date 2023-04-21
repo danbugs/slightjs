@@ -81,3 +81,19 @@ sql-all-in-one:
 	cargo run --package slightjs-cli -- ./target/wasm32-wasi/debug/slightjs_engine.wasm ./examples/sql/index.js ./sql.wasm
 	slight -c ./examples/sql/slightfile.toml run sql.wasm -l
 # </sql>
+
+# <http-client>
+.PHONY: compile-http-client-example
+compile-http-client-example:
+	cargo run --package slightjs-cli -- ./target/wasm32-wasi/debug/slightjs_engine.wasm ./examples/http-client/index.js ./http-client.wasm
+
+.PHONY: run-http-client-example
+run-http-client-example:
+	slight -c ./examples/http-client/slightfile.toml run http-client.wasm -l
+
+.PHONY: http-client-all-in-one
+http-client-all-in-one:
+	cargo build --package slightjs-engine --target wasm32-wasi
+	cargo run --package slightjs-cli -- ./target/wasm32-wasi/debug/slightjs_engine.wasm ./examples/http-client/index.js ./http-client.wasm
+	slight -c ./examples/http-client/slightfile.toml run http-client.wasm -l
+# </http-client>

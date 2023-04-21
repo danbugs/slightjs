@@ -1,18 +1,6 @@
 use quickjs_wasm_rs::{Context, Value};
 
-/// The HTTP body.
-pub type Body = String;
-/// The HTTP headers represented as a list of (name, value) pairs.
-pub type Headers = Vec<(String, String)>;
-/// The HTTP status code.
-pub type HttpStatus = u16;
-/// An HTTP response.
-#[derive(serde::Deserialize)]
-pub struct Response {
-    pub status: HttpStatus,
-    pub headers: Option<Headers>,
-    pub body: Option<Body>,
-}
+use crate::slight_http_types::Response;
 
 #[link(wasm_import_module = "http-server")]
 extern "C" {
