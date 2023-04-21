@@ -1,0 +1,73 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build: 
+    uses: ./.github/workflows/ci.yaml
+  create_release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          prerelease: true
+
+  release_assets:
+    needs: create_release
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      matrix:
+        config:
+          - os: ubuntu-latest
+          - os: windows-latest
+          - os: macos-latest,
+
+    steps:
+      - uses: actions/checkout@v1 
+      
+      - uses: actions/download-artifact@v3
+        with:
+          name: slightjs-linux-x86_64.tar.gz
+        if: ${{ fromJSON(matrix.config.os == 'ubuntu-latest') }}
+
+      - name: "add slightjs-linux-x86_64 tar to release"
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            slightjs-linux-x86_64.tar.gz
+        if: ${{ fromJSON(matrix.config.os == 'ubuntu-latest') }}
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: slightjs-windows-x86_64.tar.gz
+        if: ${{ fromJSON(matrix.config.os == 'windows-latest') }}      
+
+      - name: "add slightjs-windows tar to release"
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            slightjs-windows-x86_64.tar.gz
+        if: ${{ fromJSON(matrix.config.os == 'windows-latest') }}
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: slightjs-macos.tar.gz
+        if: ${{ fromJSON(matrix.config.os == 'macos-latest') }}   
+
+      - name: "add slight-macos tar to release"
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            slightjs-macos-amd64.tar.gz
+        if: ${{ fromJSON(matrix.config.os == 'macos-latest') && 
+          fromJSON(matrix.config.arch == 'amd64') }}
