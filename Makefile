@@ -1,6 +1,57 @@
+# <general>
+.phony: build-slightjs-cli
+build-slightjs-cli:
+	cargo build --release --package slightjs-cli
+
 .PHONY: compile-slight-engine
 compile-slight-engine:
 	cargo build --package slightjs-engine --target wasm32-wasi
+
+.PHONY: install-deps-linux
+install-deps-linux:
+	set -x
+	curl -sS -L -O https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-15/wasi-sdk-15.0-linux.tar.gz
+	tar xf wasi-sdk-15.0-linux.tar.gz
+	sudo mkdir -p /opt/wasi-sdk
+	sudo mv wasi-sdk-15.0/* /opt/wasi-sdk/
+	sudo rm -rf wasi-sdk-*
+	chmod +x /opt/wasi-sdk/bin/clang
+
+.PHONY: install-deps-macos
+install-deps-macos:
+	set -x
+	curl -sS -L -O https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-15/wasi-sdk-15.0-macos.tar.gz
+	tar xf wasi-sdk-15.0-macos.tar.gz
+	sudo mkdir -p /opt/wasi-sdk
+	sudo mv wasi-sdk-15.0/* /opt/wasi-sdk/
+	sudo rm -rf wasi-sdk-*
+	chmod +x /opt/wasi-sdk/bin/clang
+
+.PHONY: install-deps-win
+install-deps-win:
+	choco install make -y
+	choco install wget -y
+	wget -O wasi-sdk-15.0-mingw.tar.gz https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-15/wasi-sdk-15.0-mingw.tar.gz
+	mkdir -p C:\wasi-sdk
+	tar -xvzf wasi-sdk-15.0-mingw.tar.gz --strip-components=1 -C C:\wasi-sdk
+
+.PHONY: improve
+improve:
+	cargo clippy --all-targets --all-features --workspace -- -D warnings
+	cargo fmt --all -- --check
+
+.PHONY: prepare-release-linux
+prepare-release-linux:
+	tar -C target/ -czvf slight-linux-x86_64.tar.gz release/slight
+
+.PHONY: prepare-release-win
+prepare-release-win:
+	tar -C target/ -czvf slight-windows-x86_64.tar.gz release/slight.exe
+
+.PHONY: prepare-release-mac
+prepare-release-mac:
+	tar -C target/ -czvf slight-macos.tar.gz release/slight
+# </general>
 
 # <keyvalue>
 .PHONY: compile-keyvalue-example
