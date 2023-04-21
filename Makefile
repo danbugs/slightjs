@@ -113,3 +113,19 @@ blob-store-all-in-one:
 	cargo run --package slightjs-cli -- ./target/wasm32-wasi/debug/slightjs_engine.wasm ./examples/blob-store/index.js ./blob-store.wasm
 	slight -c ./examples/blob-store/slightfile.toml run blob-store.wasm -l
 # </blob-store>
+
+# <configs>
+.PHONY: compile-configs-example
+compile-configs-example:
+	cargo run --package slightjs-cli -- ./target/wasm32-wasi/debug/slightjs_engine.wasm ./examples/configs/index.js ./configs.wasm
+
+.PHONY: run-configs-example
+run-configs-example:
+	slight -c ./examples/configs/slightfile.toml run configs.wasm -l
+
+.PHONY: configs-all-in-one
+configs-all-in-one:
+	cargo build --package slightjs-engine --target wasm32-wasi
+	cargo run --package slightjs-cli -- ./target/wasm32-wasi/debug/slightjs_engine.wasm ./examples/configs/index.js ./configs.wasm
+	slight -c ./examples/configs/slightfile.toml run configs.wasm -l
+# </configs>
