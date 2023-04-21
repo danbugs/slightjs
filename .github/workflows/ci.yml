@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - "docs/**"
+      - "README.md"
+  workflow_call:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  improve:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+    - name: install linux deps and wasm targets
+      run: |
+        make install-deps-linux
+        rustup target add wasm32-wasi
+        rustup target add wasm32-unknown-unknown
+    - uses: Swatinem/rust-cache@v2
+    - name: check formatting of source code
+      run: make improve
+      
+  build:
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      matrix:
+        config:
+          - os: "ubuntu-latest"
+          - os: "macos-latest"
+          - os: "windows-latest"
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+      - uses: Swatinem/rust-cache@v2
+      
+      - name: install linux deps
+        run: make install-deps-linux
+        if: ${{ fromJSON(matrix.config.os == 'ubuntu-latest') }}
+      - name: install macos deps
+        run: make install-deps-macos
+        if: ${{ fromJSON(matrix.config.os == 'macos-latest') }}
+      - name: install windows deps
+        run: make install-deps-win
+        if: ${{ fromJSON(matrix.config.os == 'windows-latest') }}
+      - name: install wasm targets
+        run: |
+          rustup target add wasm32-wasi
+          rustup target add wasm32-unknown-unknown
+      
+      - name: build slightjs cli
+        run: make build-slightjs-cli
+
+      - run: make prepare-release-linux
+        if: ${{ fromJSON(matrix.config.os == 'ubuntu-latest') }}
+      - name: upload ubuntu-latest tar
+        uses: actions/upload-artifact@v3
+        with:
+          name: slight-linux-x86_64.tar.gz
+          path: ./slight-linux-x86_64.tar.gz
+          retention-days: 5
+        if: ${{ fromJSON(matrix.config.os == 'ubuntu-latest') }}
+
+      - run: make prepare-release-win
+        if: ${{ fromJSON(matrix.config.os == 'windows-latest') }}
+      - name: upload windows-latest tar
+        uses: actions/upload-artifact@v3
+        with:
+          name: slight-windows-x86_64.tar.gz
+          path: ./slight-windows-x86_64.tar.gz
+          retention-days: 5
+        if: ${{ fromJSON(matrix.config.os == 'windows-latest') }}
+
+      - run: make prepare-release-mac
+        if: ${{ fromJSON(matrix.config.os == 'macos-latest') }}
+      - name: upload macos-latest tar
+        uses: actions/upload-artifact@v3
+        with:
+          name: slight-macos.tar.gz
+          path: ./slight-macos.tar.gz
+          retention-days: 5
+        if: ${{ fromJSON(matrix.config.os == 'macos-latest') }}                  
