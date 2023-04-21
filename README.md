@@ -3,7 +3,7 @@
 This is an experimental project to make it possible to write JavaScript guest applications that make use of SpiderLightning capabilities.
 
 It is comprised of:
-- an `engine/`, which pre-initializes Wasm and injects slight dependencies into the JS context (i.e., w/ `quicjs-wasm-rs`), and
+- an `engine/`, which pre-initializes Wasm and injects slight dependencies into the JS context (i.e., w/ `quickjs-wasm-rs`), and
 - a `cli/`, which inits the pre-initialized Wasm w/ actual guest code by passing it to the engine through `stdin`.
 
 To try it out yourself, you can do: 
