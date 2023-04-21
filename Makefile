@@ -5,7 +5,12 @@ build-slightjs-cli:
 
 .PHONY: compile-slight-engine
 compile-slight-engine:
-	cargo build --package slightjs-engine --target wasm32-wasi
+	cargo build --release --package slightjs-engine --target wasm32-wasi
+
+.PHONY: improve
+improve:
+	cargo clippy --all-targets --all-features --workspace -- -D warnings
+	cargo fmt --all -- --check
 
 .PHONY: install-deps-linux
 install-deps-linux:
@@ -35,22 +40,17 @@ install-deps-win:
 	mkdir -p C:\wasi-sdk
 	tar -xvzf wasi-sdk-15.0-mingw.tar.gz --strip-components=1 -C C:\wasi-sdk
 
-.PHONY: improve
-improve:
-	cargo clippy --all-targets --all-features --workspace -- -D warnings
-	cargo fmt --all -- --check
-
 .PHONY: prepare-release-linux
 prepare-release-linux:
-	tar -C target/ -czvf slight-linux-x86_64.tar.gz release/slight
+	tar -C target/ -czvf slightjs-linux-x86_64.tar.gz release/slight
 
 .PHONY: prepare-release-win
 prepare-release-win:
-	tar -C target/ -czvf slight-windows-x86_64.tar.gz release/slight.exe
+	tar -C target/ -czvf slightjs-windows-x86_64.tar.gz release/slight.exe
 
 .PHONY: prepare-release-mac
 prepare-release-mac:
-	tar -C target/ -czvf slight-macos.tar.gz release/slight
+	tar -C target/ -czvf slightjs-macos.tar.gz release/slight
 # </general>
 
 # <keyvalue>
