@@ -39,15 +39,15 @@ install-deps-win:
 
 .PHONY: prepare-release-linux
 prepare-release-linux:
-	tar -C target/ -czvf slightjs-linux-x86_64.tar.gz release/slight
+	tar -C target/ -czvf slightjs-linux-x86_64.tar.gz release/slightjs
 
 .PHONY: prepare-release-win
 prepare-release-win:
-	tar -C target/ -czvf slightjs-windows-x86_64.tar.gz release/slight.exe
+	tar -C target/ -czvf slightjs-windows-x86_64.tar.gz release/slightjs.exe
 
 .PHONY: prepare-release-mac
 prepare-release-mac:
-	tar -C target/ -czvf slightjs-macos.tar.gz release/slight
+	tar -C target/ -czvf slightjs-macos.tar.gz release/slightjs
 # </general>
 
 # <keyvalue>
