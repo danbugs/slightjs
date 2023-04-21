@@ -70,8 +70,8 @@ jobs:
       - name: upload ubuntu-latest tar
         uses: actions/upload-artifact@v3
         with:
-          name: slight-linux-x86_64.tar.gz
-          path: ./slight-linux-x86_64.tar.gz
+          name: slightjs-linux-x86_64.tar.gz
+          path: ./slightjs-linux-x86_64.tar.gz
           retention-days: 5
         if: ${{ fromJSON(matrix.config.os == 'ubuntu-latest') }}
 
@@ -80,8 +80,8 @@ jobs:
       - name: upload windows-latest tar
         uses: actions/upload-artifact@v3
         with:
-          name: slight-windows-x86_64.tar.gz
-          path: ./slight-windows-x86_64.tar.gz
+          name: slightjs-windows-x86_64.tar.gz
+          path: ./slightjs-windows-x86_64.tar.gz
           retention-days: 5
         if: ${{ fromJSON(matrix.config.os == 'windows-latest') }}
 
@@ -90,7 +90,7 @@ jobs:
       - name: upload macos-latest tar
         uses: actions/upload-artifact@v3
         with:
-          name: slight-macos.tar.gz
-          path: ./slight-macos.tar.gz
+          name: slightjs-macos.tar.gz
+          path: ./slightjs-macos.tar.gz
           retention-days: 5
         if: ${{ fromJSON(matrix.config.os == 'macos-latest') }}                  
