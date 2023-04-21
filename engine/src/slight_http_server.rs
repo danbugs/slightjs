@@ -33,7 +33,7 @@ pub fn router_new(context: &Context, _this: &Value, _: &[Value]) -> anyhow::Resu
     unsafe {
         let ptr0 = __HTTP_SERVER_RET_AREA.0.as_mut_ptr() as i32;
         new(ptr0);
-        match i32::from(*((ptr0 + 0) as *const u8)) {
+        match i32::from(*(ptr0 as *const u8)) {
             0 => context.value_from_i32(*((ptr0 + 4) as *const i32)),
             1 => context.value_from_str(&HttpRouterError(ptr0)),
             _ => panic!("invalid enum discriminant"),
@@ -53,7 +53,7 @@ pub fn router_new_with_base(
         let len0 = vec0.len() as i32;
         let ptr1 = __HTTP_SERVER_RET_AREA.0.as_mut_ptr() as i32;
         new_with_base(ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => context.value_from_i32(*((ptr1 + 4) as *const i32)),
             1 => context.value_from_str(&HttpRouterError(ptr1)),
             _ => panic!("invalid enum discriminant"),
@@ -73,7 +73,7 @@ pub fn router_get(context: &Context, _this: &Value, args: &[Value]) -> anyhow::R
         let len1 = vec1.len() as i32;
         let ptr2 = __HTTP_SERVER_RET_AREA.0.as_mut_ptr() as i32;
         get1(self0, ptr0, len0, ptr1, len1, ptr2);
-        match i32::from(*((ptr2 + 0) as *const u8)) {
+        match i32::from(*(ptr2 as *const u8)) {
             0 => context.value_from_i32(*((ptr2 + 4) as *const i32)),
             1 => context.value_from_str(&HttpRouterError(ptr2)),
             _ => panic!("invalid enum discriminant"),
@@ -93,7 +93,7 @@ pub fn router_put(context: &Context, _this: &Value, args: &[Value]) -> anyhow::R
         let len1 = vec1.len() as i32;
         let ptr2 = __HTTP_SERVER_RET_AREA.0.as_mut_ptr() as i32;
         put(self0, ptr0, len0, ptr1, len1, ptr2);
-        match i32::from(*((ptr2 + 0) as *const u8)) {
+        match i32::from(*(ptr2 as *const u8)) {
             0 => context.value_from_i32(*((ptr2 + 4) as *const i32)),
             1 => context.value_from_str(&HttpRouterError(ptr2)),
             _ => panic!("invalid enum discriminant"),
@@ -113,7 +113,7 @@ pub fn router_post(context: &Context, _this: &Value, args: &[Value]) -> anyhow::
         let len1 = vec1.len() as i32;
         let ptr2 = __HTTP_SERVER_RET_AREA.0.as_mut_ptr() as i32;
         post(self0, ptr0, len0, ptr1, len1, ptr2);
-        match i32::from(*((ptr2 + 0) as *const u8)) {
+        match i32::from(*(ptr2 as *const u8)) {
             0 => context.value_from_i32(*((ptr2 + 4) as *const i32)),
             1 => context.value_from_str(&HttpRouterError(ptr2)),
             _ => panic!("invalid enum discriminant"),
@@ -133,7 +133,7 @@ pub fn router_delete(context: &Context, _this: &Value, args: &[Value]) -> anyhow
         let len1 = vec1.len() as i32;
         let ptr2 = __HTTP_SERVER_RET_AREA.0.as_mut_ptr() as i32;
         delete1(self0, ptr0, len0, ptr1, len1, ptr2);
-        match i32::from(*((ptr2 + 0) as *const u8)) {
+        match i32::from(*(ptr2 as *const u8)) {
             0 => context.value_from_i32(*((ptr2 + 4) as *const i32)),
             1 => context.value_from_str(&HttpRouterError(ptr2)),
             _ => panic!("invalid enum discriminant"),
@@ -150,7 +150,7 @@ pub fn server_serve(context: &Context, _this: &Value, args: &[Value]) -> anyhow:
         let len0 = vec0.len() as i32;
         let ptr1 = __HTTP_SERVER_RET_AREA.0.as_mut_ptr() as i32;
         serve(ptr0, len0, vec1, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => context.value_from_i32(*((ptr1 + 4) as *const i32)),
             1 => context.value_from_str(&HttpRouterError(ptr1)),
             _ => panic!("invalid enum discriminant"),
@@ -164,7 +164,7 @@ pub fn server_stop(context: &Context, _this: &Value, args: &[Value]) -> anyhow::
         let self0 = args[0].as_i32_unchecked();
         let ptr0 = __HTTP_SERVER_RET_AREA.0.as_mut_ptr() as i32;
         stop(self0, ptr0);
-        match i32::from(*((ptr0 + 0) as *const u8)) {
+        match i32::from(*(ptr0 as *const u8)) {
             0 => context.null_value(),
             1 => context.value_from_str(&HttpRouterError(ptr0)),
             _ => panic!("invalid enum discriminant"),
@@ -243,6 +243,8 @@ pub fn inject_http_server_dependency(context: &Context, global: &Value) -> anyho
     Ok(())
 }
 
+/// # Safety
+#[allow(clippy::too_many_arguments)]
 pub unsafe fn get_js_req_arg(
     arg0: i32,
     arg1: i32,
@@ -267,7 +269,7 @@ pub unsafe fn get_js_req_arg(
             let len2 = *((base + 12) as *const i32) as usize;
             (
                 String::from_utf8(Vec::from_raw_parts(
-                    *((base + 0) as *const i32) as *mut _,
+                    *(base as *const i32) as *mut _,
                     len1,
                     len1,
                 ))
@@ -297,7 +299,7 @@ pub unsafe fn get_js_req_arg(
             let len5 = *((base + 12) as *const i32) as usize;
             (
                 String::from_utf8(Vec::from_raw_parts(
-                    *((base + 0) as *const i32) as *mut _,
+                    *(base as *const i32) as *mut _,
                     len4,
                     len4,
                 ))
@@ -362,10 +364,11 @@ pub unsafe fn get_js_req_arg(
     Ok(request)
 }
 
+/// # Safety
 pub unsafe fn get_js_res_ret(result: String) -> i32 {
     let ptr8 = 0;
 
-    *((ptr8 + 0) as *mut u8) = (0i32) as u8;
+    *(ptr8 as *mut u8) = (0i32) as u8;
 
     let Response {
         status: status9,
@@ -399,7 +402,7 @@ pub unsafe fn get_js_res_ret(result: String) -> i32 {
                     let len11 = vec11.len() as i32;
                     core::mem::forget(vec11);
                     *((base + 4) as *mut i32) = len11;
-                    *((base + 0) as *mut i32) = ptr11;
+                    *(base as *mut i32) = ptr11;
                     let vec12 = (t10_1.into_bytes()).into_boxed_slice();
                     let ptr12 = vec12.as_ptr() as i32;
                     let len12 = vec12.len() as i32;

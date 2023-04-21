@@ -22,7 +22,7 @@ pub fn pub_open(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Res
         let len0 = vec0.len() as i32;
         let ptr1 = __MESSAGING_RET_AREA.0.as_mut_ptr() as i32;
         p_open(ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => context.value_from_i32(*((ptr1 + 4) as *const i32)),
             1 => context.value_from_str(&MessagingError(ptr1)),
             _ => panic!("invalid enum discriminant"),
@@ -42,7 +42,7 @@ pub fn pub_publish(context: &Context, _this: &Value, args: &[Value]) -> anyhow::
         let len1 = vec1.len() as i32;
         let ptr2 = __MESSAGING_RET_AREA.0.as_mut_ptr() as i32;
         publish(self0, ptr0, len0, ptr1, len1, ptr2);
-        match i32::from(*((ptr2 + 0) as *const u8)) {
+        match i32::from(*(ptr2 as *const u8)) {
             0 => context.null_value(),
             1 => context.value_from_str(&MessagingError(ptr2)),
             _ => panic!("invalid enum discriminant"),
@@ -58,7 +58,7 @@ pub fn sub_open(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Res
         let len0 = vec0.len() as i32;
         let ptr1 = __MESSAGING_RET_AREA.0.as_mut_ptr() as i32;
         s_open(ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => context.value_from_i32(*((ptr1 + 4) as *const i32)),
             1 => context.value_from_str(&MessagingError(ptr1)),
             _ => panic!("invalid enum discriminant"),
@@ -75,7 +75,7 @@ pub fn sub_subscribe(context: &Context, _this: &Value, args: &[Value]) -> anyhow
         let len0 = vec0.len() as i32;
         let ptr1 = __MESSAGING_RET_AREA.0.as_mut_ptr() as i32;
         subscribe(self0, ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => {
                 let len2 = *((ptr1 + 8) as *const i32) as usize;
 
@@ -103,7 +103,7 @@ pub fn sub_receive(context: &Context, _this: &Value, args: &[Value]) -> anyhow::
         let len0 = vec0.len() as i32;
         let ptr1 = __MESSAGING_RET_AREA.0.as_mut_ptr() as i32;
         receive(self0, ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => {
                 let len2 = *((ptr1 + 8) as *const i32) as usize;
 
@@ -214,7 +214,7 @@ pub fn inject_messaging_dependency(context: &Context, global: &Value) -> anyhow:
     let _pub = context.object_value()?;
     _pub.set_property("open", context.wrap_callback(pub_open)?)?;
     _pub.set_property("publish", context.wrap_callback(pub_publish)?)?;
-    
+
     let sub = context.object_value()?;
     sub.set_property("open", context.wrap_callback(sub_open)?)?;
     sub.set_property("subscribe", context.wrap_callback(sub_subscribe)?)?;

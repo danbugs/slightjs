@@ -41,7 +41,7 @@ pub fn container_open(context: &Context, _this: &Value, args: &[Value]) -> anyho
         let len0 = vec0.len() as i32;
         let ptr1 = __BLOB_STORE_RET_AREA.0.as_mut_ptr() as i32;
         bs_open(ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => context.value_from_i32(*((ptr1 + 4) as *const i32)),
             1 => context.value_from_str(&BlobStoreError(ptr1)),
             _ => panic!("invalid enum discriminant"),
@@ -54,7 +54,7 @@ pub fn container_name(context: &Context, _this: &Value, args: &[Value]) -> anyho
         let self0: i32 = args[0].as_i32_unchecked();
         let ptr0 = __BLOB_STORE_RET_AREA.0.as_mut_ptr() as i32;
         name(self0, ptr0);
-        match i32::from(*((ptr0 + 0) as *const u8)) {
+        match i32::from(*(ptr0 as *const u8)) {
             0 => context.value_from_str({
                 let len1 = *((ptr0 + 8) as *const i32) as usize;
 
@@ -76,7 +76,7 @@ pub fn container_info(context: &Context, _this: &Value, args: &[Value]) -> anyho
         let self0: i32 = args[0].as_i32_unchecked();
         let ptr0 = __BLOB_STORE_RET_AREA.0.as_mut_ptr() as i32;
         info(self0, ptr0);
-        match i32::from(*((ptr0 + 0) as *const u8)) {
+        match i32::from(*(ptr0 as *const u8)) {
             0 => {
                 let len1 = *((ptr0 + 12) as *const i32) as usize;
 
@@ -116,7 +116,7 @@ pub fn container_read_object(
         let len0 = vec0.len() as i32;
         let ptr1 = __BLOB_STORE_RET_AREA.0.as_mut_ptr() as i32;
         read_object(self0, ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => context.value_from_i32(*((ptr1 + 4) as *const i32)),
             1 => context.value_from_str(&BlobStoreError(ptr1)),
             _ => panic!("invalid enum discriminant"),
@@ -136,7 +136,7 @@ pub fn container_write_object(
         let len0 = vec0.len() as i32;
         let ptr1 = __BLOB_STORE_RET_AREA.0.as_mut_ptr() as i32;
         write_object(self0, ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => context.value_from_i32(*((ptr1 + 4) as *const i32)),
             1 => context.value_from_str(&BlobStoreError(ptr1)),
             _ => panic!("invalid enum discriminant"),
@@ -153,7 +153,7 @@ pub fn container_list_objects(
         let self0: i32 = args[0].as_i32_unchecked();
         let ptr0 = __BLOB_STORE_RET_AREA.0.as_mut_ptr() as i32;
         list_objects(self0, ptr0);
-        match i32::from(*((ptr0 + 0) as *const u8)) {
+        match i32::from(*(ptr0 as *const u8)) {
             0 => Ok({
                 let base2 = *((ptr0 + 4) as *const i32);
                 let len2 = *((ptr0 + 8) as *const i32);
@@ -164,7 +164,7 @@ pub fn container_list_objects(
                         let len1 = *((base + 4) as *const i32) as usize;
 
                         String::from_utf8(Vec::from_raw_parts(
-                            *((base + 0) as *const i32) as *mut _,
+                            *(base as *const i32) as *mut _,
                             len1,
                             len1,
                         ))
@@ -182,7 +182,7 @@ pub fn container_list_objects(
                 for i in 0..len2 {
                     arr.append_property(
                         context
-                            .value_from_str(&format!("{}", result2[i as usize]))
+                            .value_from_str(&result2[i as usize].to_string())
                             .unwrap(),
                     )
                     .unwrap();
@@ -208,7 +208,7 @@ pub fn container_delete_object(
         let len0 = vec0.len() as i32;
         let ptr1 = __BLOB_STORE_RET_AREA.0.as_mut_ptr() as i32;
         delete_object(self0, ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => context.null_value(),
             1 => context.value_from_str(&BlobStoreError(ptr1)),
             _ => panic!("invalid enum discriminant"),
@@ -255,7 +255,7 @@ pub fn container_delete_objects(
                 let ptr0 = vec0.as_ptr() as i32;
                 let len0 = vec0.len() as i32;
                 *((base + 4) as *mut i32) = len0;
-                *((base + 0) as *mut i32) = ptr0;
+                *(base as *mut i32) = ptr0;
             }
         }
         let ptr2 = __BLOB_STORE_RET_AREA.0.as_mut_ptr() as i32;
@@ -263,7 +263,7 @@ pub fn container_delete_objects(
         if layout1.size() != 0 {
             std::alloc::dealloc(result1, layout1);
         }
-        match i32::from(*((ptr2 + 0) as *const u8)) {
+        match i32::from(*(ptr2 as *const u8)) {
             0 => context.null_value(),
             1 => context.value_from_str(&BlobStoreError(ptr2)),
             _ => panic!("invalid enum discriminant"),
@@ -283,7 +283,7 @@ pub fn container_has_object(
         let len0 = vec0.len() as i32;
         let ptr1 = __BLOB_STORE_RET_AREA.0.as_mut_ptr() as i32;
         has_object(self0, ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => context.value_from_bool(match i32::from(*((ptr1 + 4) as *const u8)) {
                 0 => false,
                 1 => true,
@@ -307,7 +307,7 @@ pub fn container_object_info(
         let len0 = vec0.len() as i32;
         let ptr1 = __BLOB_STORE_RET_AREA.0.as_mut_ptr() as i32;
         object_info(self0, ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => Ok({
                 let len2 = *((ptr1 + 12) as *const i32) as usize;
                 let len3 = *((ptr1 + 20) as *const i32) as usize;
@@ -355,7 +355,7 @@ pub fn container_clear(context: &Context, _this: &Value, args: &[Value]) -> anyh
         let self0: i32 = args[0].as_i32_unchecked();
         let ptr0 = __BLOB_STORE_RET_AREA.0.as_mut_ptr() as i32;
         clear(self0, ptr0);
-        match i32::from(*((ptr0 + 0) as *const u8)) {
+        match i32::from(*(ptr0 as *const u8)) {
             0 => context.null_value(),
             1 => context.value_from_str(&BlobStoreError(ptr0)),
             _ => panic!("invalid enum discriminant"),
@@ -375,7 +375,7 @@ pub fn write_stream_write(
         let len0 = vec0.len() as i32;
         let ptr1 = __BLOB_STORE_RET_AREA.0.as_mut_ptr() as i32;
         write(self0, ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => context.null_value(),
             1 => context.value_from_str(&BlobStoreError(ptr1)),
             _ => panic!("invalid enum discriminant"),
@@ -392,7 +392,7 @@ pub fn write_stream_close(
         let self0: i32 = args[0].as_i32_unchecked();
         let ptr0 = __BLOB_STORE_RET_AREA.0.as_mut_ptr() as i32;
         close(self0, ptr0);
-        match i32::from(*((ptr0 + 0) as *const u8)) {
+        match i32::from(*(ptr0 as *const u8)) {
             0 => context.null_value(),
             1 => context.value_from_str(&BlobStoreError(ptr0)),
             _ => panic!("invalid enum discriminant"),
@@ -406,7 +406,7 @@ pub fn read_stream_read(context: &Context, _this: &Value, args: &[Value]) -> any
         let size = args[1].as_f64_unchecked() as i64;
         let ptr0 = __BLOB_STORE_RET_AREA.0.as_mut_ptr() as i32;
         read(self0, size, ptr0);
-        match i32::from(*((ptr0 + 0) as *const u8)) {
+        match i32::from(*(ptr0 as *const u8)) {
             0 => Ok(match i32::from(*((ptr0 + 4) as *const u8)) {
                 0 => context.null_value()?,
                 1 => context.array_buffer_value(&{
@@ -431,7 +431,7 @@ pub fn read_stream_available(
         let self0: i32 = args[0].as_i32_unchecked();
         let ptr0 = __BLOB_STORE_RET_AREA.0.as_mut_ptr() as i32;
         available(self0, ptr0);
-        match i32::from(*((ptr0 + 0) as *const u8)) {
+        match i32::from(*(ptr0 as *const u8)) {
             0 => context.value_from_u64(*((ptr0 + 8) as *const i64) as u64),
             1 => context.value_from_str(&BlobStoreError(ptr0)),
             _ => panic!("invalid enum discriminant"),
@@ -468,10 +468,22 @@ pub fn inject_blob_store_dependency(context: &Context, global: &Value) -> anyhow
     container.set_property("name", context.wrap_callback(container_name)?)?;
     container.set_property("info", context.wrap_callback(container_info)?)?;
     container.set_property("read_object", context.wrap_callback(container_read_object)?)?;
-    container.set_property("write_object", context.wrap_callback(container_write_object)?)?;
-    container.set_property("list_objects", context.wrap_callback(container_list_objects)?)?;
-    container.set_property("delete_object", context.wrap_callback(container_delete_object)?)?;
-    container.set_property("delete_objects", context.wrap_callback(container_delete_objects)?)?;
+    container.set_property(
+        "write_object",
+        context.wrap_callback(container_write_object)?,
+    )?;
+    container.set_property(
+        "list_objects",
+        context.wrap_callback(container_list_objects)?,
+    )?;
+    container.set_property(
+        "delete_object",
+        context.wrap_callback(container_delete_object)?,
+    )?;
+    container.set_property(
+        "delete_objects",
+        context.wrap_callback(container_delete_objects)?,
+    )?;
     container.set_property("has_object", context.wrap_callback(container_has_object)?)?;
     container.set_property("object_info", context.wrap_callback(container_object_info)?)?;
     container.set_property("clear", context.wrap_callback(container_clear)?)?;

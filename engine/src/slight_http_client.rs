@@ -118,7 +118,7 @@ pub fn http_client_request(
                 let ptr3 = vec3.as_ptr() as i32;
                 let len3 = vec3.len() as i32;
                 *((base + 4) as *mut i32) = len3;
-                *((base + 0) as *mut i32) = ptr3;
+                *(base as *mut i32) = ptr3;
                 let vec4 = t2_1;
                 let ptr4 = vec4.as_ptr() as i32;
                 let len4 = vec4.len() as i32;
@@ -146,7 +146,7 @@ pub fn http_client_request(
                 let ptr7 = vec7.as_ptr() as i32;
                 let len7 = vec7.len() as i32;
                 *((base + 4) as *mut i32) = len7;
-                *((base + 0) as *mut i32) = ptr7;
+                *(base as *mut i32) = ptr7;
                 let vec8 = t6_1;
                 let ptr8 = vec8.as_ptr() as i32;
                 let len8 = vec8.len() as i32;
@@ -192,7 +192,7 @@ pub fn http_client_request(
         if layout9.size() != 0 {
             std::alloc::dealloc(result9, layout9);
         }
-        match i32::from(*((ptr12 + 0) as *const u8)) {
+        match i32::from(*(ptr12 as *const u8)) {
             0 => context.value_from_str(
                 &serde_json::to_string(&Response {
                     status: i32::from(*((ptr12 + 4) as *const u16)) as u16,
@@ -210,7 +210,7 @@ pub fn http_client_request(
 
                                     (
                                         String::from_utf8(Vec::from_raw_parts(
-                                            *((base + 0) as *const i32) as *mut _,
+                                            *(base as *const i32) as *mut _,
                                             len13,
                                             len13,
                                         ))

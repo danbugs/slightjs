@@ -7,15 +7,15 @@ use quickjs_wasm_rs::{Context, Value};
 use send_wrapper::SendWrapper;
 use slight_http_server::{get_js_req_arg, get_js_res_ret};
 
-pub mod slight_distributed_locking;
-pub mod slight_configs;
 pub mod slight_blob_store;
-pub mod slight_http_types;
+pub mod slight_configs;
+pub mod slight_distributed_locking;
 pub mod slight_http_client;
-pub mod slight_sql;
-pub mod slight_messaging;
 pub mod slight_http_server;
+pub mod slight_http_types;
 pub mod slight_keyvalue;
+pub mod slight_messaging;
+pub mod slight_sql;
 
 static CONTEXT: OnceCell<SendWrapper<Context>> = OnceCell::new();
 
@@ -103,6 +103,7 @@ pub extern "C" fn on_server_init() -> i32 {
     1
 }
 
+/// # Safety
 #[export_name = "handle-get"]
 pub unsafe extern "C" fn handle_get(
     arg0: i32,
@@ -120,15 +121,21 @@ pub unsafe extern "C" fn handle_get(
     let global = context.global_object().unwrap();
     let entrypoint = global.get_property("handle_get").unwrap();
     let req = get_js_req_arg(
-        arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, &context,
+        arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, context,
     )
     .unwrap();
 
-    let res = entrypoint.call(&global, &[req]).unwrap().as_str().unwrap().to_string();
+    let res = entrypoint
+        .call(&global, &[req])
+        .unwrap()
+        .as_str()
+        .unwrap()
+        .to_string();
 
     get_js_res_ret(res)
 }
 
+/// # Safety
 #[export_name = "handle-post"]
 pub unsafe extern "C" fn handle_post(
     arg0: i32,
@@ -146,15 +153,21 @@ pub unsafe extern "C" fn handle_post(
     let global = context.global_object().unwrap();
     let entrypoint = global.get_property("handle_post").unwrap();
     let req = get_js_req_arg(
-        arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, &context,
+        arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, context,
     )
     .unwrap();
 
-    let res = entrypoint.call(&global, &[req]).unwrap().as_str().unwrap().to_string();
+    let res = entrypoint
+        .call(&global, &[req])
+        .unwrap()
+        .as_str()
+        .unwrap()
+        .to_string();
 
     get_js_res_ret(res)
 }
 
+/// # Safety
 #[export_name = "handle-put"]
 pub unsafe extern "C" fn handle_put(
     arg0: i32,
@@ -172,15 +185,21 @@ pub unsafe extern "C" fn handle_put(
     let global = context.global_object().unwrap();
     let entrypoint = global.get_property("handle_put").unwrap();
     let req = get_js_req_arg(
-        arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, &context,
+        arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, context,
     )
     .unwrap();
 
-    let res = entrypoint.call(&global, &[req]).unwrap().as_str().unwrap().to_string();
+    let res = entrypoint
+        .call(&global, &[req])
+        .unwrap()
+        .as_str()
+        .unwrap()
+        .to_string();
 
     get_js_res_ret(res)
 }
 
+/// # Safety
 #[export_name = "handle-delete"]
 pub unsafe extern "C" fn handle_delete(
     arg0: i32,
@@ -198,11 +217,16 @@ pub unsafe extern "C" fn handle_delete(
     let global = context.global_object().unwrap();
     let entrypoint = global.get_property("handle_delete").unwrap();
     let req = get_js_req_arg(
-        arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, &context,
+        arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, context,
     )
     .unwrap();
 
-    let res = entrypoint.call(&global, &[req]).unwrap().as_str().unwrap().to_string();
+    let res = entrypoint
+        .call(&global, &[req])
+        .unwrap()
+        .as_str()
+        .unwrap()
+        .to_string();
 
     get_js_res_ret(res)
 }

@@ -18,7 +18,7 @@ pub fn configs_open(context: &Context, _this: &Value, args: &[Value]) -> anyhow:
         let len0 = vec0.len() as i32;
         let ptr1 = __CONFIGS_RET_AREA.0.as_mut_ptr() as i32;
         c_open(ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => context.value_from_i32(*((ptr1 + 4) as *const i32)),
             1 => context.value_from_str(&ConfigsError(ptr1)),
             _ => panic!("invalid enum discriminant"),
@@ -35,7 +35,7 @@ pub fn configs_get(context: &Context, _this: &Value, args: &[Value]) -> anyhow::
         let len0 = vec0.len() as i32;
         let ptr1 = __CONFIGS_RET_AREA.0.as_mut_ptr() as i32;
         c_get(self0, ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => context.array_buffer_value({
                 let len2 = *((ptr1 + 8) as *const i32) as usize;
 
@@ -59,7 +59,7 @@ pub fn configs_set(context: &Context, _this: &Value, args: &[Value]) -> anyhow::
         let len1 = vec1.len() as i32;
         let ptr2 = __CONFIGS_RET_AREA.0.as_mut_ptr() as i32;
         c_set(self0, ptr0, len0, ptr1, len1, ptr2);
-        match i32::from(*((ptr2 + 0) as *const u8)) {
+        match i32::from(*(ptr2 as *const u8)) {
             0 => context.null_value(),
             1 => context.value_from_str(&ConfigsError(ptr2)),
             _ => panic!("invalid enum discriminant"),

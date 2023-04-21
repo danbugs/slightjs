@@ -20,7 +20,7 @@ pub fn sql_open(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Res
         let len0 = vec0.len() as i32;
         let ptr1 = __SQL_RET_AREA.0.as_mut_ptr() as i32;
         sq_open(ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => context.value_from_i32(*((ptr1 + 4) as *const i32)),
             1 => context.value_from_str(&SqlError(ptr1)),
             _ => panic!("invalid enum discriminant"),
@@ -34,7 +34,7 @@ pub fn sql_query(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Re
         let q0: i32 = args[1].as_i32_unchecked();
         let ptr0 = __SQL_RET_AREA.0.as_mut_ptr() as i32;
         query(self0, q0, ptr0);
-        match i32::from(*((ptr0 + 0) as *const u8)) {
+        match i32::from(*(ptr0 as *const u8)) {
             0 => Ok({
                 let base7 = *((ptr0 + 4) as *const i32);
                 let len7 = *((ptr0 + 8) as *const i32);
@@ -49,7 +49,7 @@ pub fn sql_query(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Re
                             "field_name",
                             context.value_from_str(
                                 &String::from_utf8(Vec::from_raw_parts(
-                                    *((base + 0) as *const i32) as *mut _,
+                                    *(base as *const i32) as *mut _,
                                     len1,
                                     len1,
                                 ))
@@ -59,22 +59,24 @@ pub fn sql_query(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Re
 
                         row_item.set_property(
                             "type",
-                            context.value_from_str(&match i32::from(*((base + 8) as *const u8)) {
-                                0 => "Int32",
-                                1 => "Int64",
-                                2 => "Uint32",
-                                3 => "Uint64",
-                                4 => "Float",
-                                5 => "Double",
-                                6 => "Str",
-                                7 => "Boolean",
-                                8 => "Date",
-                                9 => "Time",
-                                10 => "Timestamp",
-                                11 => "Binary",
-                                12 => "Null",
-                                _ => panic!("invalid enum discriminant"),
-                            })?,
+                            context.value_from_str(
+                                match i32::from(*((base + 8) as *const u8)) {
+                                    0 => "Int32",
+                                    1 => "Int64",
+                                    2 => "Uint32",
+                                    3 => "Uint64",
+                                    4 => "Float",
+                                    5 => "Double",
+                                    6 => "Str",
+                                    7 => "Boolean",
+                                    8 => "Date",
+                                    9 => "Time",
+                                    10 => "Timestamp",
+                                    11 => "Binary",
+                                    12 => "Null",
+                                    _ => panic!("invalid enum discriminant"),
+                                },
+                            )?,
                         )?;
 
                         row_item.set_property(
@@ -162,7 +164,7 @@ pub fn sql_exec(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Res
         let q0: i32 = args[1].as_i32_unchecked();
         let ptr0 = __SQL_RET_AREA.0.as_mut_ptr() as i32;
         exec(self0, q0, ptr0);
-        match i32::from(*((ptr0 + 0) as *const u8)) {
+        match i32::from(*(ptr0 as *const u8)) {
             0 => context.null_value(),
             1 => context.value_from_str(&SqlError(ptr0)),
             _ => panic!("invalid enum discriminant"),
@@ -170,7 +172,11 @@ pub fn sql_exec(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Res
     }
 }
 
-pub fn statement_prepare(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Result<Value> {
+pub fn statement_prepare(
+    context: &Context,
+    _this: &Value,
+    args: &[Value],
+) -> anyhow::Result<Value> {
     unsafe {
         let vec0 = args[0].as_str().unwrap().to_string();
         let ptr0 = vec0.as_ptr() as i32;
@@ -180,34 +186,37 @@ pub fn statement_prepare(context: &Context, _this: &Value, args: &[Value]) -> an
             let js_arr_len = js_arr.get_property("length")?.as_i32_unchecked();
             let mut result = Vec::with_capacity(js_arr_len as usize);
             for i in 0..js_arr_len {
-                result.push(js_arr.get_indexed_property(i.try_into().unwrap())?.as_str()?.to_string());
+                result.push(
+                    js_arr
+                        .get_indexed_property(i.try_into().unwrap())?
+                        .as_str()?
+                        .to_string(),
+                );
             }
             result
         };
         let vec2: &[&str] = &vec2_r.iter().map(|s| s.as_str()).collect::<Vec<_>>();
         let len2 = vec2.len() as i32;
         let layout2 = core::alloc::Layout::from_size_align_unchecked(vec2.len() * 8, 4);
-        let result2 = if layout2.size() != 0
-        {
-          let ptr = std::alloc::alloc(layout2);
-          if ptr.is_null()
-          {
-            std::alloc::handle_alloc_error(layout2);
-          }
-          ptr
-        }else {
-          std::ptr::null_mut()
+        let result2 = if layout2.size() != 0 {
+            let ptr = std::alloc::alloc(layout2);
+            if ptr.is_null() {
+                std::alloc::handle_alloc_error(layout2);
+            }
+            ptr
+        } else {
+            std::ptr::null_mut()
         };
-        for (i, e) in vec2.into_iter().enumerate() {
-          let base = result2 as i32 + (i as i32) * 8;
-          {
-            let vec1 = e;
-            let ptr1 = vec1.as_ptr() as i32;
-            let len1 = vec1.len() as i32;
-            *((base + 4) as *mut i32) = len1;
-            *((base + 0) as *mut i32) = ptr1;
-            
-          }}
+        for (i, e) in vec2.iter().enumerate() {
+            let base = result2 as i32 + (i as i32) * 8;
+            {
+                let vec1 = e;
+                let ptr1 = vec1.as_ptr() as i32;
+                let len1 = vec1.len() as i32;
+                *((base + 4) as *mut i32) = len1;
+                *(base as *mut i32) = ptr1;
+            }
+        }
         let ret = prepare(ptr0, len0, result2 as i32, len2);
         context.value_from_i32(ret)
     }

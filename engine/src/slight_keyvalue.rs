@@ -22,7 +22,7 @@ fn keyvalue_open(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Re
         let len0 = vec0.len() as i32;
         let ptr1 = __KEYVALUE_RET_AREA.0.as_mut_ptr() as i32;
         open(ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => context.value_from_i32(*((ptr1 + 4) as *const i32)),
             1 => context.value_from_str(&KeyvalueError(ptr1)),
             _ => panic!("invalid enum discriminant"),
@@ -39,14 +39,14 @@ fn keyvalue_get(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Res
         let len0 = vec0.len() as i32;
         let ptr1 = __KEYVALUE_RET_AREA.0.as_mut_ptr() as i32;
         get(self0, ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => {
                 let len2 = *((ptr1 + 8) as *const i32) as usize;
 
                 let v = Vec::from_raw_parts(*((ptr1 + 4) as *const i32) as *mut _, len2, len2);
 
                 context.array_buffer_value(&v)
-            },
+            }
             1 => context.value_from_str(&KeyvalueError(ptr1)),
             _ => panic!("invalid enum discriminant"),
         }
@@ -65,7 +65,7 @@ fn keyvalue_set(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Res
         let len1 = vec1.len() as i32;
         let ptr2 = __KEYVALUE_RET_AREA.0.as_mut_ptr() as i32;
         set(self0, ptr0, len0, ptr1, len1, ptr2);
-        match i32::from(*((ptr2 + 0) as *const u8)) {
+        match i32::from(*(ptr2 as *const u8)) {
             0 => context.null_value(),
             1 => context.value_from_str(&KeyvalueError(ptr2)),
             _ => panic!("invalid enum discriminant"),
@@ -79,7 +79,7 @@ fn keyvalue_keys(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Re
         let self0: i32 = args[0].as_i32_unchecked();
         let ptr0 = __KEYVALUE_RET_AREA.0.as_mut_ptr() as i32;
         keys(self0, ptr0);
-        match i32::from(*((ptr0 + 0) as *const u8)) {
+        match i32::from(*(ptr0 as *const u8)) {
             0 => Ok({
                 let base2 = *((ptr0 + 4) as *const i32);
                 let len2 = *((ptr0 + 8) as *const i32);
@@ -90,7 +90,7 @@ fn keyvalue_keys(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Re
                         let len1 = *((base + 4) as *const i32) as usize;
 
                         String::from_utf8(Vec::from_raw_parts(
-                            *((base + 0) as *const i32) as *mut _,
+                            *(base as *const i32) as *mut _,
                             len1,
                             len1,
                         ))
@@ -108,7 +108,7 @@ fn keyvalue_keys(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Re
                 for i in 0..len2 {
                     arr.append_property(
                         context
-                            .value_from_str(&format!("{}", result2[i as usize]))
+                            .value_from_str(&result2[i as usize].to_string())
                             .unwrap(),
                     )
                     .unwrap();
@@ -132,7 +132,7 @@ fn keyvalue_delete(context: &Context, _this: &Value, args: &[Value]) -> anyhow::
         let ptr1 = __KEYVALUE_RET_AREA.0.as_mut_ptr() as i32;
 
         delete(self0, ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => context.null_value(),
             1 => context.value_from_str(&KeyvalueError(ptr1)),
             _ => panic!("invalid enum discriminant"),

@@ -16,14 +16,18 @@ extern "C" {
 }
 
 /// open a distributed-locking object
-pub fn distributed_locking_open(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Result<Value> {
+pub fn distributed_locking_open(
+    context: &Context,
+    _this: &Value,
+    args: &[Value],
+) -> anyhow::Result<Value> {
     unsafe {
         let vec0 = args[0].as_str().unwrap().to_string();
         let ptr0 = vec0.as_ptr() as i32;
         let len0 = vec0.len() as i32;
         let ptr1 = __DISTRIBUTED_LOCKING_RET_AREA.0.as_mut_ptr() as i32;
         dl_open(ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => context.value_from_i32(*((ptr1 + 4) as *const i32)),
             1 => context.value_from_str(&DistributedLockingError(ptr1)),
             _ => panic!("invalid enum discriminant"),
@@ -32,7 +36,11 @@ pub fn distributed_locking_open(context: &Context, _this: &Value, args: &[Value]
 }
 
 /// creates a lock with a name, returns the lock key
-pub fn distributed_locking_lock(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Result<Value> {
+pub fn distributed_locking_lock(
+    context: &Context,
+    _this: &Value,
+    args: &[Value],
+) -> anyhow::Result<Value> {
     unsafe {
         let self0 = args[0].as_i32_unchecked();
         let vec0 = args[1].as_str().unwrap().to_string();
@@ -40,7 +48,7 @@ pub fn distributed_locking_lock(context: &Context, _this: &Value, args: &[Value]
         let len0 = vec0.len() as i32;
         let ptr1 = __DISTRIBUTED_LOCKING_RET_AREA.0.as_mut_ptr() as i32;
         lock(self0, ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => context.array_buffer_value({
                 let len2 = *((ptr1 + 8) as *const i32) as usize;
 
@@ -53,7 +61,11 @@ pub fn distributed_locking_lock(context: &Context, _this: &Value, args: &[Value]
 }
 
 /// creates a lock with a lease id, hence giving the lock a TTL
-pub fn distributed_locking_lock_with_time_to_live(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Result<Value> {
+pub fn distributed_locking_lock_with_time_to_live(
+    context: &Context,
+    _this: &Value,
+    args: &[Value],
+) -> anyhow::Result<Value> {
     unsafe {
         let self0 = args[0].as_i32_unchecked();
         let vec0 = args[1].as_str().unwrap().to_string();
@@ -61,14 +73,8 @@ pub fn distributed_locking_lock_with_time_to_live(context: &Context, _this: &Val
         let ptr0 = vec0.as_ptr() as i32;
         let len0 = vec0.len() as i32;
         let ptr1 = __DISTRIBUTED_LOCKING_RET_AREA.0.as_mut_ptr() as i32;
-        lock_with_time_to_live(
-            self0,
-            ptr0,
-            len0,
-            time_to_live_in_secs,
-            ptr1,
-        );
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        lock_with_time_to_live(self0, ptr0, len0, time_to_live_in_secs, ptr1);
+        match i32::from(*(ptr1 as *const u8)) {
             0 => context.array_buffer_value({
                 let len2 = *((ptr1 + 8) as *const i32) as usize;
 
@@ -81,7 +87,11 @@ pub fn distributed_locking_lock_with_time_to_live(context: &Context, _this: &Val
 }
 
 /// unlock a lock given a lock key
-pub fn distributed_locking_unlock(context: &Context, _this: &Value, args: &[Value]) -> anyhow::Result<Value> {
+pub fn distributed_locking_unlock(
+    context: &Context,
+    _this: &Value,
+    args: &[Value],
+) -> anyhow::Result<Value> {
     unsafe {
         let self0 = args[0].as_i32_unchecked();
         let vec0 = args[1].as_str().unwrap().to_string();
@@ -89,7 +99,7 @@ pub fn distributed_locking_unlock(context: &Context, _this: &Value, args: &[Valu
         let len0 = vec0.len() as i32;
         let ptr1 = __DISTRIBUTED_LOCKING_RET_AREA.0.as_mut_ptr() as i32;
         unlock(self0, ptr0, len0, ptr1);
-        match i32::from(*((ptr1 + 0) as *const u8)) {
+        match i32::from(*(ptr1 as *const u8)) {
             0 => context.null_value(),
             1 => context.value_from_str(&DistributedLockingError(ptr1)),
             _ => panic!("invalid enum discriminant"),
@@ -188,8 +198,12 @@ pub fn inject_distributed_locking_dependency(
     let distributed_locking = context.object_value()?;
     distributed_locking.set_property("open", context.wrap_callback(distributed_locking_open)?)?;
     distributed_locking.set_property("lock", context.wrap_callback(distributed_locking_lock)?)?;
-    distributed_locking.set_property("lock_with_time_to_live", context.wrap_callback(distributed_locking_lock_with_time_to_live)?)?;
-    distributed_locking.set_property("unlock", context.wrap_callback(distributed_locking_unlock)?)?;
+    distributed_locking.set_property(
+        "lock_with_time_to_live",
+        context.wrap_callback(distributed_locking_lock_with_time_to_live)?,
+    )?;
+    distributed_locking
+        .set_property("unlock", context.wrap_callback(distributed_locking_unlock)?)?;
     global.set_property("distributed_locking", distributed_locking)?;
     Ok(())
 }
