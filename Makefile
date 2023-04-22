@@ -5,7 +5,7 @@ build-slightjs-cli:
 
 .PHONY: compile-slight-engine
 compile-slight-engine:
-	cargo build --release --package slightjs-engine --target wasm32-wasi
+	cargo build --package slightjs-engine --target wasm32-wasi
 
 .PHONY: improve
 improve:

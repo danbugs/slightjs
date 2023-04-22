@@ -3,10 +3,10 @@ function _start() {
                 router.put(
                     router.post(
                         router.get(router.new(), 
-                        "*", "handle_get"),
-                    "*", "handle_post"), 
-                "*", "handle_put"), 
-            "*", "handle_delete");
+                        "/get/*", "handle_get"),
+                    "/post/*", "handle_post"), 
+                "/put/*", "handle_put"), 
+            "/delete/*", "handle_delete");
 
     console.log("Server listening on port 3000...");
     let s = server.serve("0.0.0.0:3000", r);
@@ -15,10 +15,10 @@ function _start() {
 function handle_get(req) {
     console.log("I just got a request @ uri: ", req.uri, ", w/ method: ", req.method);
     switch (req.uri) {
-        case "/hello":
+        case "/get/hello":
             console.log("hello!");
             break;
-        case "/world":
+        case "get/world":
             console.log("world!");
             break;
         default:
