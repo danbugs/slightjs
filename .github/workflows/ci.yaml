@@ -17,10 +17,9 @@ jobs:
   improve:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions-rs/toolchain@v1
+    - uses: actions/checkout@v3
+    - uses: dtolnay/rust-toolchain@master
       with:
-        profile: minimal
         toolchain: stable
     - name: install linux deps and wasm targets
       run: |
@@ -43,10 +42,9 @@ jobs:
           - os: "windows-latest"
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@master
         with:
-          profile: minimal
           toolchain: stable
       - uses: Swatinem/rust-cache@v2
       
