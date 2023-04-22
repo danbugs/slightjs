@@ -11,6 +11,20 @@ To try it out yourself, you can do:
 make keyvalue-all-in-one
 ```
 
+## Installation
+
+### UNIX
+
+```sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/danbugs/slightjs/main/install.sh)"
+```
+
+### Windows
+
+```sh
+iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/danbugs/slightjs/main/install.ps1'))
+```
+
 Here's a video demo: [![youtube-thumbnail](./docs/imgs/slightjs_app_demo_thumbnail.png)](https://youtu.be/dTyx3UTJdUI)
 
 > Note: Examples ran on a modified version of `slight` still to be merged into `main` (see more, here: https://github.com/deislabs/spiderlightning/pull/386).
