@@ -11,6 +11,10 @@ To try it out yourself, you can do:
 make keyvalue-all-in-one
 ```
 
+Here's a video demo: [![youtube-thumbnail](./docs/imgs/slightjs_app_demo_thumbnail.png)](https://youtu.be/dTyx3UTJdUI)
+
+> Note: Examples ran on a modified version of `slight` still to be merged into `main` (see more, here: https://github.com/deislabs/spiderlightning/pull/386).
+
 ## Installation
 
 ### UNIX
@@ -25,6 +29,8 @@ make keyvalue-all-in-one
 iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/danbugs/slightjs/main/install.ps1'))
 ```
 
-Here's a video demo: [![youtube-thumbnail](./docs/imgs/slightjs_app_demo_thumbnail.png)](https://youtu.be/dTyx3UTJdUI)
+## Engine Download
 
-> Note: Examples ran on a modified version of `slight` still to be merged into `main` (see more, here: https://github.com/deislabs/spiderlightning/pull/386).
+```sh
+curl -O slightjs_engine.wasm https://raw.githubusercontent.com/danbugs/slightjs/main/slightjs_engine.wasm
+```
