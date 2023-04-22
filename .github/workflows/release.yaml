@@ -64,9 +64,9 @@ jobs:
           name: slightjs-macos.tar.gz
         if: ${{ fromJSON(matrix.config.os == 'macos-latest') }}   
 
-      - name: "add slight-macos tar to release"
+      - name: "add slightjs-macos tar to release"
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            slightjs-macos-amd64.tar.gz
+            slightjs-macos.tar.gz
         if: ${{ fromJSON(matrix.config.os == 'macos-latest') }}
