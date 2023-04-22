@@ -31,6 +31,14 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercon
 
 ## Engine Download
 
+### UNIX
+
 ```sh
-curl -O slightjs_engine.wasm https://raw.githubusercontent.com/danbugs/slightjs/main/slightjs_engine.wasm
+curl https://raw.githubusercontent.com/danbugs/slightjs/main/slightjs_engine.wasm --output slightjs_engine.wasm
+```
+
+### Windows
+
+```sh
+curl https://raw.githubusercontent.com/danbugs/slightjs/main/slightjs_engine.wasm -O slightjs_engine.wasm
 ```
