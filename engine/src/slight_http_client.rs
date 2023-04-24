@@ -76,14 +76,8 @@ pub fn http_client_request(
                 if body.is_null() {
                     None
                 } else {
-                    let body_len = body.get_property("length")?.as_i32_unchecked();
-                    let mut result = Vec::with_capacity(body_len as usize);
-                    for i in 0..body_len {
-                        let i_elem = body.get_indexed_property(i.try_into()?)?;
-                        let value = i_elem.as_i32_unchecked();
-                        result.push(value as u8);
-                    }
-                    Some(result.clone())
+                    let b_s = body.as_str()?.to_string();
+                    Some(b_s.as_bytes().to_vec())
                 }
             };
 
